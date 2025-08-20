@@ -1,0 +1,10 @@
+#upload data
+data <- read.csv("dPCR results.csv")
+
+#separate the values according to each treatment plant and target
+library(dplyr)
+BBW_crAss <- data %>%  # nolint
+    filter(plant == "BBW", target == "CrAssphage") %>% # nolint
+    pull(concentration)
+
+shapiro.test(BBW_crAss)
