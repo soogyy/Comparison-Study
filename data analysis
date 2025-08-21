@@ -2,9 +2,66 @@
 data <- read.csv("dPCR results.csv")
 
 #separate the values according to each treatment plant and target
+#BBW
 library(dplyr)
 BBW_crAss <- data %>%  # nolint
     filter(plant == "BBW", target == "CrAssphage") %>% # nolint
     pull(concentration)
 
-shapiro.test(BBW_crAss)
+print(shapiro.test(BBW_crAss))
+
+BBW_ToBRFV <- data %>%  # nolint
+    filter(plant == "BBW", target == "ToBRFV") %>% # nolint
+    pull(concentration)
+
+print(shapiro.test(BBW_ToBRFV))
+
+#PCW
+PCW_crAss <- data %>%  # nolint
+    filter(plant == "PCW", target == "CrAssphage") %>% # nolint
+    pull(concentration)
+
+print(shapiro.test(PCW_crAss))
+
+PCW_ToBRFV <- data %>%  # nolint
+    filter(plant == "PCW", target == "ToBRFV") %>% # nolint
+    pull(concentration)
+
+print(shapiro.test(PCW_ToBRFV))
+
+#FCW
+FCW_crAss <- data %>%  # nolint
+    filter(plant == "FCW", target == "CrAssphage") %>% # nolint
+    pull(concentration)
+
+print(shapiro.test(FCW_crAss))
+
+FCW_ToBRFV <- data %>%  # nolint
+    filter(plant == "FCW", target == "ToBRFV") %>% # nolint
+    pull(concentration)
+
+print(shapiro.test(FCW_ToBRFV))
+
+#determine which
+
+#graph for visualization
+install.packages("ggplot2")
+library(ggplot2)
+ggplot(data, aes(week, y = concentration, color = target, group = target)) +
+    geom_line(size = 1) +
+    geom_point(size = 3) +
+    facet_wrap(~plant, nrow = 1) +
+    scale_y_continuous(limits = c(0, 600000)) +
+    labs(
+        title = "",
+        x = "Week",
+        y = "Concentration (copies/mL)",
+        color = "Targets"
+    ) +
+    theme_minimal(base_size = 14) +
+    theme(
+    strip.text = element_text(face = "bold"),
+    legend.position = "top"
+)
+
+ggsave("dPCR results graph.png", width = 12, height = 4, dpi = 300)
